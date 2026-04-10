@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* ── Custom design tokens ── */
+@theme {
+  /* UAC brand */
+  --color-uac-red:        #f91d12;
+  --color-uac-red-dark:   #9B0B22;
+  --color-uac-red-deep:   #6E0718;
+  --color-uac-red-soft:   #FCEDEF;
+  --color-uac-red-mid:    #F5C0C8;
+  --color-uac-green:      #00793A;
+  --color-uac-green-dk:   #005A2A;
+  --color-uac-green-soft: #E6F4EC;
+  --color-uac-green-mid:  #A3D4B8;
+
+  /* Neutrals */
+  --color-ink:   #111318;
+  --color-ink2:  #252930;
+  --color-ink3:  #454C5C;
+  --color-ink4:  #737B8C;
+  --color-ink5:  #A8B0C0;
+  --color-ink6:  #D0D4DE;
+  --color-paper: #F6F5F2;
+  --color-surf:  #FFFFFF;
+  --color-surf2: #F0EFeb;
+  --color-border: #E3E1DB;
+
+  /* Semantic */
+  --color-amber:       #C97000;
+  --color-amber-soft:  #FEF3E2;
+  --color-blue:        #1755CC;
+  --color-blue-soft:   #E5EEFF;
+  --color-purple:      #6C2BD9;
+  --color-purple-soft: #F0EAFF;
+  --color-purple-mid:  #c4a0ff;
+
+  /* Fonts — loaded via next/font in layout.tsx */
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 14px;
+}
+
+/* ── Base resets & page defaults ── */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  min-height: 100vh;
+}
+
+/* ── Scrollbar (thin + brand-styled) ── */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--color-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink6); }
+
+/* ── Page-in animation ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.18s ease; }
