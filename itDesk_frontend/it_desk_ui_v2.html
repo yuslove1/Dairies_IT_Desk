@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Desk v2 — UAC Foods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* UAC Foods brand */
+      --uac-red: #f91d12;
+      --uac-red-dark: #9B0B22;
+      --uac-red-deep: #6E0718;
+      --uac-red-soft: #FCEDEF;
+      --uac-red-mid: #F5C0C8;
+      --uac-green: #00793A;
+      --uac-green-dk: #005A2A;
+      --uac-green-soft: #E6F4EC;
+      --uac-green-mid: #A3D4B8;
+      --white: #FFFFFF;
+
+      /* Neutrals */
+      --ink: #111318;
+      --ink2: #252930;
+      --ink3: #454C5C;
+      --ink4: #737B8C;
+      --ink5: #A8B0C0;
+      --ink6: #D0D4DE;
+      --paper: #F6F5F2;
+      --surf: #FFFFFF;
+      --surf2: #F0EFeb;
+
+      /* Semantic */
+      --amber: #C97000;
+      --amber-soft: #FEF3E2;
+      --blue: #1755CC;
+      --blue-soft: #E5EEFF;
+      --purple: #6C2BD9;
+      --purple-soft: #F0EAFF;
+
+      /* Structure */
+      --border: #E3E1DB;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --shadow: 0 1px 4px rgba(17, 19, 24, 0.06), 0 2px 10px rgba(17, 19, 24, 0.05);
+      --shadow-md: 0 4px 20px rgba(17, 19, 24, 0.10);
+
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--uac-red-deep);
+      padding: 0 0 0 0;
+      border-bottom: 3px solid var(--uac-green);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 28px 40px 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .uac-badge {
+      background: var(--uac-red);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .uac-stripe {
+      height: 4px;
+      width: 28px;
+      border-radius: 2px;
+    }
+
+    .header-titles {}
+
+    .header-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 3px;
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: white;
+    }
+
+    .header-title span {
+      color: var(--uac-green-mid);
+    }
+
+    .header-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 3px;
+    }
+
+    .header-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* ── SCREEN NAV ── */
+    .screen-nav {
+      background: var(--ink2);
+      display: flex;
+      overflow-x: auto;
+      padding: 0 40px;
+      gap: 0;
+      max-width: 100%;
+    }
+
+    .screen-nav button {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 13px 18px;
+      background: none;
+      border: none;
+      color: #606878;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.13s, border-color 0.13s;
+    }
+
+    .screen-nav button:hover {
+      color: #c0c8d8;
+    }
+
+    .screen-nav button.active {
+      color: var(--uac-green-mid);
+      border-bottom-color: var(--uac-green);
+    }
+
+    /* ── SCREENS ── */
+    .screens {
+      padding: 36px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeUp 0.18s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .screen-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink5);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .screen-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── APP SHELL ── */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 212px 1fr;
+      grid-template-rows: 52px 1fr;
+      height: 680px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      grid-column: 1 / -1;
+      background: var(--uac-red-deep);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 10px;
+      border-bottom: 2px solid var(--uac-green);
+    }
+
+    .tb-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tb-logo-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--uac-green);
+    }
+
+    .tb-div {
+      width: 1px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .tb-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 0.07em;
+    }
+
+    .tb-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tb-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .badge-staff {
+      background: rgba(0, 121, 58, 0.25);
+      color: var(--uac-green-mid);
+      border: 1px solid rgba(0, 121, 58, 0.4);
+    }
+
+    .badge-manager {
+      background: rgba(108, 43, 217, 0.25);
+      color: #c4a0ff;
+      border: 1px solid rgba(108, 43, 217, 0.4);
+    }
+
+    .badge-admin {
+      background: rgba(200, 16, 46, 0.25);
+      color: #ffaab4;
+      border: 1px solid rgba(200, 16, 46, 0.4);
+    }
+
+    .tb-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .av-staff {
+      background: var(--uac-green);
+    }
+
+    .av-manager {
+      background: var(--purple);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--surf);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sb-sec {
+      padding: 0 10px;
+      margin-bottom: 4px;
+    }
+
+    .sb-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--ink6);
+      padding: 0 8px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink3);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+      margin-bottom: 1px;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .nav-item.active {
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+      font-weight: 600;
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--uac-green);
+    }
+
+    .nav-icon {
+      font-size: 13px;
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+      color: var(--ink5);
+    }
+
+    .nav-count {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 8px;
+      background: var(--uac-red-soft);
+      color: var(--uac-red);
+      font-weight: 600;
+    }
+
+    .nav-count.green {
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+    }
+
+    .sb-div {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 10px;
+    }
+
+    .sb-push {
+      flex: 1;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      background: var(--paper);
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    .pg-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .pg-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink5);
+      margin-bottom: 18px;
+    }
+
+    /* ── STAT CARDS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+    }
+
+    .stat-l {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink5);
+      margin-bottom: 5px;
+    }
+
+    .stat-v {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .stat-d {
+      font-family: var(--mono);
+      font-size: 9px;
+      margin-top: 3px;
+    }
+
+    .stat.s-red {
+      border-color: var(--uac-red);
+      background: var(--uac-red-soft);
+    }
+
+    .stat.s-red .stat-v {
+      color: var(--uac-red);
+    }
+
+    .stat.s-green {
+      border-color: var(--uac-green);
+      background: var(--uac-green-soft);
+    }
+
+    .stat.s-green .stat-v {
+      color: var(--uac-green);
+    }
+
+    .stat.s-amber .stat-v {
+      color: var(--amber);
+    }
+
+    /* ── SECTION HEADER ── */
+    .sec-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .sec-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all 0.12s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-red {
+      background: var(--uac-red);
+      color: white;
+    }
+
+    .btn-red:hover {
+      background: var(--uac-red-dark);
+    }
+
+    .btn-green {
+      background: var(--uac-green);
+      color: white;
+    }
+
+    .btn-green:hover {
+      background: var(--uac-green-dk);
+    }
+
+    .btn-ghost {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--ink3);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--ink4);
+      color: var(--ink);
+    }
+
+    .btn-soft-red {
+      background: var(--uac-red-soft);
+      color: var(--uac-red);
+      border: 1px solid var(--uac-red-mid);
+    }
+
+    .btn-soft-green {
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+      border: 1px solid var(--uac-green-mid);
+    }
+
+    .btn-outline-green {
+      background: none;
+      border: 1px solid var(--uac-green);
+      color: var(--uac-green-dk);
+    }
+
+    .btn-outline-green:hover {
+      background: var(--uac-green-soft);
+    }
+
+    .btn-sm {
+      padding: 4px 9px;
+      font-size: 9px;
+    }
+
+    /* ── TASK CARDS ── */
+    .task-card {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 11px;
+      cursor: pointer;
+      transition: border-color 0.12s, box-shadow 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .task-card:hover {
+      border-color: var(--uac-green);
+      box-shadow: 0 2px 8px rgba(0, 121, 58, 0.10);
+    }
+
+    .task-card.p-high::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--uac-red);
+    }
+
+    .task-card.p-med::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--amber);
+    }
+
+    .task-card.p-low::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--uac-green);
+    }
+
+    .task-card.p-high,
+    .task-card.p-med,
+    .task-card.p-low {
+      padding-left: 14px;
+    }
+
+    .tc-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .tc-meta {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tc-assign {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink4);
+      margin-top: 5px;
+    }
+
+    .assign-av {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 7px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .av-s {
+      background: var(--uac-green);
+    }
+
+    .av-m {
+      background: var(--purple);
+    }
+
+    /* ── PILLS + TAGS ── */
+    .pill {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    .p-todo {
+      background: var(--surf2);
+      color: var(--ink4);
+    }
+
+    .p-wip {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .p-done {
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      padding: 2px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.03em;
+    }
+
+    .t-hw {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .t-net {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .t-sw {
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+
+    .t-urg {
+      background: var(--uac-red-soft);
+      color: var(--uac-red);
+    }
+
+    .tc-time {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+      margin-left: auto;
+    }
+
+    /* ── KANBAN ── */
+    .kanban {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .kb-col {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .kb-hd {
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .kb-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .d-todo {
+      background: var(--ink5);
+    }
+
+    .d-wip {
+      background: var(--amber);
+    }
+
+    .d-done {
+      background: var(--uac-green);
+    }
+
+    .kb-col-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+
+    .kb-count {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+    }
+
+    .kb-cards {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-height: 100px;
+    }
+
+    /* ── LOGS ── */
+    .log-entry {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 13px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .log-time {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+      min-width: 38px;
+      padding-top: 2px;
+      line-height: 1.5;
+    }
+
+    .log-body {
+      font-size: 11px;
+      color: var(--ink2);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .log-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--uac-green-dk);
+      padding: 1px 5px;
+      background: var(--uac-green-soft);
+      border-radius: 3px;
+      margin-left: 7px;
+    }
+
+    /* ── HANDOVER ── */
+    .ho-card {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ho-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--uac-red);
+    }
+
+    .ho-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+
+    .ho-body {
+      font-size: 11px;
+      color: var(--ink3);
+      line-height: 1.7;
+    }
+
+    .ho-foot {
+      margin-top: 9px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ho-date {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+    }
+
+    .ho-active {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    /* ── FORMS ── */
+    .form-card {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .f-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink4);
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .f-input {
+      width: 100%;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.12s;
+    }
+
+    .f-input:focus {
+      border-color: var(--uac-green);
+    }
+
+    .f-textarea {
+      width: 100%;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 72px;
+      transition: border-color 0.12s;
+    }
+
+    .f-textarea:focus {
+      border-color: var(--uac-green);
+    }
+
+    .f-select {
+      width: 100%;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--ink);
+      outline: none;
+      appearance: none;
+    }
+
+    .f-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .f-grp {
+      margin-bottom: 12px;
+    }
+
+    .spacer {
+      height: 1px;
+    }
+
+    /* ── TWO / THREE COL ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* ── ASSIGN CHIP ── */
+    .assign-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--uac-green-soft);
+      border: 1px solid var(--uac-green-mid);
+      border-radius: 20px;
+      padding: 3px 8px 3px 4px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--uac-green-dk);
+    }
+
+    .assign-chip.mgr {
+      background: var(--purple-soft);
+      border-color: #c4a0ff;
+      color: var(--purple);
+    }
+
+    /* ── MANAGER BANNER ── */
+    .mgr-banner {
+      background: linear-gradient(135deg, var(--uac-red-deep) 0%, #3a0818 100%);
+      border: 1px solid rgba(200, 16, 46, 0.3);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .mgr-banner-text .mgr-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .mgr-banner-text .mgr-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 2px;
+    }
+
+    .mgr-ro-badge {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(108, 43, 217, 0.25);
+      color: #c4a0ff;
+      border: 1px solid rgba(108, 43, 217, 0.4);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .mgr-create-badge {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(0, 121, 58, 0.25);
+      color: var(--uac-green-mid);
+      border: 1px solid rgba(0, 121, 58, 0.4);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── REPORT ── */
+    .report-shell {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .report-hd {
+      background: var(--uac-red-deep);
+      border-bottom: 2px solid var(--uac-green);
+      padding: 18px 26px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .rpt-logo {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rpt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--uac-green);
+    }
+
+    .rpt-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .rpt-exp {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 121, 58, 0.25);
+      color: var(--uac-green-mid);
+      border: 1px solid rgba(0, 121, 58, 0.4);
+      margin-left: auto;
+    }
+
+    .report-body {
+      padding: 24px;
+    }
+
+    .rpt-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .rpt-stat {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .rpt-n {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .rpt-l {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .rpt-log {
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--ink2);
+      display: flex;
+      gap: 10px;
+      line-height: 1.6;
+    }
+
+    .rpt-log:last-child {
+      border: none;
+    }
+
+    .rpt-lt {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink5);
+      min-width: 38px;
+      padding-top: 2px;
+    }
+
+    /* ── LOGIN ── */
+    .login-shell {
+      height: 560px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .login-l {
+      background: var(--uac-red-deep);
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-l::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--uac-green);
+    }
+
+    .login-watermark {
+      position: absolute;
+      bottom: -28px;
+      right: -14px;
+      font-family: var(--mono);
+      font-size: 110px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.025);
+      letter-spacing: -0.04em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .l-brand {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .l-brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--uac-green);
+    }
+
+    .l-tagline {
+      font-size: 22px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      margin-top: 28px;
+    }
+
+    .l-tagline strong {
+      font-weight: 700;
+    }
+
+    .l-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.25);
+      margin-top: 8px;
+    }
+
+    .l-features {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .l-feat {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .l-feat-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--uac-green);
+      flex-shrink: 0;
+    }
+
+    .login-r {
+      background: var(--surf);
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .l-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .l-hint {
+      font-size: 12px;
+      color: var(--ink4);
+      margin-bottom: 26px;
+    }
+
+    .l-footer {
+      margin-top: 20px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--ink6);
+      text-align: center;
+    }
+
+    .l-uac-strip {
+      display: flex;
+      height: 3px;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .l-uac-strip div {
+      flex: 1;
+    }
+
+    /* ── TOKEN BOX ── */
+    .token-box {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--uac-green-dk);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex: 1;
+    }
+
+    .token-copy {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+      cursor: pointer;
+      border: 1px solid var(--uac-green-mid);
+      margin-left: auto;
+    }
+
+    /* ── DESIGN TOKENS SCREEN ── */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .swatch {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .sw-color {
+      height: 48px;
+    }
+
+    .sw-info {
+      padding: 7px 9px;
+      background: var(--surf);
+    }
+
+    .sw-name {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--ink3);
+    }
+
+    .sw-hex {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--ink5);
+    }
+
+    .type-scale {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .tr {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .tr:last-child {
+      margin-bottom: 0;
+    }
+
+    .tr-meta {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--ink5);
+      min-width: 90px;
+      line-height: 1.5;
+    }
+
+    .comp-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+    }
+
+    /* ── ASSIGNED TO SECTION ── */
+    .assigned-section {
+      background: var(--uac-green-soft);
+      border: 1px solid var(--uac-green-mid);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--uac-green-dk);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .assigned-section .assign-av {
+      width: 20px;
+      height: 20px;
+      font-size: 8px;
+    }
+
+    /* ── TASK DETAIL PANEL ── */
+    .task-detail {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .td-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .td-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .td-section {
+      margin-bottom: 12px;
+    }
+
+    .td-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink5);
+      margin-bottom: 5px;
+    }
+
+    .td-value {
+      font-size: 12px;
+      color: var(--ink2);
+    }
+
+    .td-assignee {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--uac-green-soft);
+      border: 1px solid var(--uac-green-mid);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+    }
+
+    .td-assignee-info .name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--uac-green-dk);
+    }
+
+    .td-assignee-info .role {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--uac-green);
+    }
+
+    /* ── ALERTS / BANNERS ── */
+    .alert {
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .alert-amber {
+      background: var(--amber-soft);
+      color: var(--amber);
+      border: 1px solid #f5d08a;
+    }
+
+    .alert-green {
+      background: var(--uac-green-soft);
+      color: var(--uac-green-dk);
+      border: 1px solid var(--uac-green-mid);
+    }
+
+    .alert-red {
+      background: var(--uac-red-soft);
+      color: var(--uac-red);
+      border: 1px solid var(--uac-red-mid);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── PAGE HEADER ── -->
+  <div class="page-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="uac-badge">
+          <div class="uac-stripe" style="background:var(--uac-red);"></div>
+          <div class="uac-stripe" style="background:white;"></div>
+          <div class="uac-stripe" style="background:var(--uac-green);"></div>
+        </div>
+        <div class="header-titles">
+          <div class="header-eyebrow">UAC Foods Dairies Plant · IT Department</div>
+          <div class="header-title">IT <span>Desk</span></div>
+          <div class="header-sub">// Task & Activity Management System · v1.0</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        UI/UX Design Mockup<br>
+        Stack: Next.js · Express · PostgreSQL · JWT<br>
+        Brand: UAC Foods (Red · White · Green)
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN NAV ── -->
+  <nav class="screen-nav">
+    <button class="active" onclick="show('login',this)">01 · Login</button>
+    <button onclick="show('dashboard',this)">02 · Staff Dashboard</button>
+    <button onclick="show('tasks',this)">03 · Task Board</button>
+    <button onclick="show('logs',this)">04 · Daily Log</button>
+    <button onclick="show('handover',this)">05 · Handover</button>
+    <button onclick="show('manager',this)">06 · Manager — View</button>
+    <button onclick="show('mgr-create',this)">07 · Manager — Create Task</button>
+    <button onclick="show('report',this)">08 · Shared Report</button>
+    <button onclick="show('tokens',this)">09 · Design Tokens</button>
+  </nav>
+
+  <div class="screens">
+
+    <!-- ════════════════════════════ -->
+    <!-- 01 · LOGIN                  -->
+    <!-- ════════════════════════════ -->
+    <div id="s-login" class="screen active">
+      <div class="screen-label">Screen 01 · Login & Authentication</div>
+      <div class="login-shell">
+        <div class="login-l">
+          <div class="login-watermark">IT DESK</div>
+          <div>
+            <div class="l-brand">
+              <div class="l-brand-dot"></div>IT DESK
+            </div>
+            <div class="l-tagline">Your IT work,<br><strong>tracked &amp; handed over.</strong></div>
+            <div class="l-sub">// UAC Foods Dairies Plant · IT Dept</div>
+          </div>
+          <div class="l-features">
+            <div class="l-feat">
+              <div class="l-feat-dot"></div>Daily activity log
+            </div>
+            <div class="l-feat">
+              <div class="l-feat-dot"></div>Kanban task board with assignments
+            </div>
+            <div class="l-feat">
+              <div class="l-feat-dot"></div>Manager create &amp; assign tasks
+            </div>
+            <div class="l-feat">
+              <div class="l-feat-dot"></div>Handover notes for next Corp member or It
+            </div>
+            <div class="l-feat">
+              <div class="l-feat-dot"></div>Shareable WhatsApp report link
+            </div>
+          </div>
+        </div>
+        <div class="login-r">
+          <div class="l-title">Sign in</div>
+          <div class="l-hint">Enter your IT department credentials to continue</div>
+          <div class="f-grp">
+            <label class="f-label">Email address</label>
+            <input class="f-input" style="font-family:var(--mono);font-size:11px;" value="itusers@uacfoodsng.com"
+                   readonly>
+          </div>
+          <div class="f-grp">
+            <label class="f-label">Password</label>
+            <input class="f-input" type="password" value="••••••••••" readonly>
+          </div>
+          <button class="btn btn-red"
+                  style="width:100%;justify-content:center;padding:9px;font-size:11px;margin-top:4px;">Sign in
+            →</button>
+          <div class="l-uac-strip">
+            <div style="background:var(--uac-red);"></div>
+            <div style="background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+            </div>
+            <div style="background:var(--uac-green);"></div>
+          </div>
+          <div class="l-footer">UAC Foods Dairies Plant · IT Desk v1.0 · Confidential</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 02 · STAFF DASHBOARD        -->
+    <!-- ════════════════════════════ -->
+    <div id="s-dashboard" class="screen">
+      <div class="screen-label">Screen 02 · Staff Dashboard</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Dairies Plant</div>
+          <div class="tb-right">
+            <div class="tb-badge badge-staff">staff</div>
+            <div class="tb-avatar av-staff">itusers</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Main</div>
+            <div class="nav-item active"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item"><span class="nav-icon">◫</span> Task Board <span class="nav-count">5</span></div>
+            <div class="nav-item"><span class="nav-icon">≡</span> Daily Log</div>
+            <div class="nav-item"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-sec">
+            <div class="sb-label">Share</div>
+            <div class="nav-item"><span class="nav-icon">↗</span> Generate Report</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-push"></div>
+          <div class="sb-sec">
+            <div class="nav-item" style="color:var(--uac-red);font-size:11px;"><span class="nav-icon">←</span> Sign out
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="pg-title">Good morning, ITUSERS ☀</div>
+          <div class="pg-sub">// Tuesday, 31 March 2026 · Dairies Plant IT Support</div>
+          <div class="stats">
+            <div class="stat s-red">
+              <div class="stat-l">Open tasks</div>
+              <div class="stat-v">5</div>
+              <div class="stat-d" style="color:var(--uac-red);">↑ 2 added today</div>
+            </div>
+            <div class="stat s-amber">
+              <div class="stat-l">In progress</div>
+              <div class="stat-v">2</div>
+            </div>
+            <div class="stat s-green">
+              <div class="stat-l">Done today</div>
+              <div class="stat-v">3</div>
+              <div class="stat-d" style="color:var(--uac-green);">✓ Good pace</div>
+            </div>
+            <div class="stat">
+              <div class="stat-l">Log entries</div>
+              <div class="stat-v">4</div>
+              <div class="stat-d" style="color:var(--ink5);">today</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="sec-hd">
+                <div class="sec-title">Active tasks</div>
+                <button class="btn btn-soft-green btn-sm">+ Add task</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div class="task-card p-high">
+                  <div class="tc-title">Fix printer on production office — paper jam recurring</div>
+                  <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="pill p-wip">in
+                      progress</span><span class="tc-time">09:14</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to you <span
+                          style="margin-left:auto;color:var(--uac-red);font-size:9px;">urgent</span>
+                  </div>
+                </div>
+                <div class="task-card p-med">
+                  <div class="tc-title">Reset WiFi password for production team</div>
+                  <div class="tc-meta"><span class="tag t-net">network</span><span class="pill p-todo">todo</span><span
+                          class="tc-time">10:02</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-m">LM</div> Assigned by manager
+                  </div>
+                </div>
+                <div class="task-card p-low">
+                  <div class="tc-title">Install antivirus on new admin laptop</div>
+                  <div class="tc-meta"><span class="tag t-sw">software</span><span class="pill p-done">done</span><span
+                          class="tc-time">08:30</span></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="sec-hd">
+                <div class="sec-title">Today's log</div>
+                <button class="btn btn-outline-green btn-sm">+ Add entry</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div class="log-entry">
+                  <div class="log-time">09:00<br>AM</div>
+                  <div class="log-body">Routine system checks on all admin machines — all normal.<span
+                          class="log-tag">routine</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">10:15<br>AM</div>
+                  <div class="log-body">production office printer complaint. Paper jam — ordered replacement roller.<span
+                          class="log-tag">hardware</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">01:30<br>PM</div>
+                  <div class="log-body">Configured new laptop for HR manager (OS, software, account).<span
+                          class="log-tag">setup</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 03 · TASK BOARD             -->
+    <!-- ════════════════════════════ -->
+    <div id="s-tasks" class="screen">
+      <div class="screen-label">Screen 03 · Kanban Task Board — Staff View</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Task Board</div>
+          <div class="tb-right">
+            <button class="btn btn-soft-green btn-sm">+ New Task</button>
+            <div class="tb-badge badge-staff">staff</div>
+            <div class="tb-avatar av-staff">Itusers</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Main</div>
+            <div class="nav-item"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item active"><span class="nav-icon">◫</span> Task Board <span class="nav-count">5</span>
+            </div>
+            <div class="nav-item"><span class="nav-icon">≡</span> Daily Log</div>
+            <div class="nav-item"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-sec">
+            <div class="sb-label">Filter</div>
+            <div class="nav-item"><span class="nav-icon">◈</span> Hardware</div>
+            <div class="nav-item"><span class="nav-icon">◈</span> Network</div>
+            <div class="nav-item"><span class="nav-icon">◈</span> Software</div>
+            <div class="nav-item"><span class="nav-icon">◈</span> Assigned to me <span class="nav-count green">3</span>
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="pg-title">Task Board</div>
+          <div class="pg-sub">// 5 open · 2 in progress · 3 done this week · manager-assigned tasks shown with purple
+            chip</div>
+          <div class="kanban">
+            <div class="kb-col">
+              <div class="kb-hd">
+                <div class="kb-dot d-todo"></div>
+                <div class="kb-col-title">To Do</div>
+                <div class="kb-count">3</div>
+              </div>
+              <div class="kb-cards">
+                <div class="task-card p-med">
+                  <div class="tc-title">Reset WiFi password for production team</div>
+                  <div class="tc-meta"><span class="tag t-net">network</span><span class="tc-time">today</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-m">LM</div><span
+                          style="color:var(--purple);font-family:var(--mono);font-size:9px;">assigned by manager</span>
+                  </div>
+                </div>
+                <div class="task-card p-low">
+                  <div class="tc-title">Check UPS battery in server room</div>
+                  <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="tc-time">tomorrow</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Self-assigned
+                  </div>
+                </div>
+                <div class="task-card p-high">
+                  <div class="tc-title">Escalate internet downtime to ISP</div>
+                  <div class="tc-meta"><span class="tag t-urg">urgent</span><span class="tc-time"
+                          style="color:var(--uac-red);">overdue</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-m">LM</div><span
+                          style="color:var(--purple);font-family:var(--mono);font-size:9px;">assigned by manager</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="kb-col">
+              <div class="kb-hd">
+                <div class="kb-dot d-wip"></div>
+                <div class="kb-col-title">In Progress</div>
+                <div class="kb-count">2</div>
+              </div>
+              <div class="kb-cards">
+                <div class="task-card p-high">
+                  <div class="tc-title">Fix printer on Production — paper jam</div>
+                  <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="tc-time">09:14</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to you
+                  </div>
+                </div>
+                <div class="task-card p-med">
+                  <div class="tc-title">Update Windows on .... computers</div>
+                  <div class="tc-meta"><span class="tag t-sw">software</span><span class="tc-time">ongoing</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to you
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="kb-col">
+              <div class="kb-hd">
+                <div class="kb-dot d-done"></div>
+                <div class="kb-col-title">Done</div>
+                <div class="kb-count">3</div>
+              </div>
+              <div class="kb-cards">
+                <div class="task-card" style="opacity:0.65;">
+                  <div class="tc-title">Install sophose on UFL-N-DAI-050</div>
+                  <div class="tc-meta"><span class="tag t-sw">software</span><span class="tc-time">08:30</span></div>
+                </div>
+                <div class="task-card" style="opacity:0.65;">
+                  <div class="tc-title">Set up email account for new HR staff</div>
+                  <div class="tc-meta"><span class="tag t-sw">software</span><span class="tc-time">Mon</span></div>
+                </div>
+                <div class="task-card" style="opacity:0.65;">
+                  <div class="tc-title">Replace keyboard on reception desk</div>
+                  <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="tc-time">Mon</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 04 · DAILY LOG              -->
+    <!-- ════════════════════════════ -->
+    <div id="s-logs" class="screen">
+      <div class="screen-label">Screen 04 · Daily Activity Log</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Daily Log</div>
+          <div class="tb-right">
+            <div class="tb-badge badge-staff">staff</div>
+            <div class="tb-avatar av-staff">Itusers</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Main</div>
+            <div class="nav-item"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item"><span class="nav-icon">◫</span> Task Board</div>
+            <div class="nav-item active"><span class="nav-icon">≡</span> Daily Log</div>
+            <div class="nav-item"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-sec">
+            <div class="sb-label">History</div>
+            <div class="nav-item"><span class="nav-icon">◷</span> Mon, 30 Mar</div>
+            <div class="nav-item"><span class="nav-icon">◷</span> Fri, 27 Mar</div>
+            <div class="nav-item"><span class="nav-icon">◷</span> Thu, 26 Mar</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="pg-title">Daily Log</div>
+          <div class="pg-sub">// Tuesday, 31 March 2026 · 4 entries logged today</div>
+          <div class="two-col">
+            <div class="form-card">
+              <div
+                   style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px;">
+                New log entry</div>
+              <div class="f-grp">
+                <label class="f-label">Activity description</label>
+                <textarea class="f-textarea" style="min-height:60px;"
+                          placeholder="What did you do? Be specific..."></textarea>
+              </div>
+              <div class="f-row">
+                <div class="f-grp" style="margin-bottom:0;">
+                  <label class="f-label">Time</label>
+                  <input class="f-input" style="font-family:var(--mono);font-size:11px;" value="14:30" readonly>
+                </div>
+                <div class="f-grp" style="margin-bottom:0;">
+                  <label class="f-label">Category</label>
+                  <select class="f-select">
+                    <option>Routine</option>
+                    <option>Hardware</option>
+                    <option>Network</option>
+                    <option>Software</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:8px;">
+                <button class="btn btn-green">Log entry →</button>
+                <button class="btn btn-ghost">Clear</button>
+              </div>
+            </div>
+            <div>
+              <div class="sec-hd" style="margin-bottom:9px;">
+                <div class="sec-title">Today's entries</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div class="log-entry">
+                  <div class="log-time">09:00</div>
+                  <div class="log-body">Arrived — routine system checks on all admin machines. All normal.<span
+                          class="log-tag">routine</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">10:15</div>
+                  <div class="log-body">Production printer complaint. Paper jam identified. Ordered replacement
+                    roller.<span class="log-tag">hardware</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">13:30</div>
+                  <div class="log-body">Configured new laptop for HR manager — OS setup, software, user account.<span
+                          class="log-tag">setup</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">15:00</div>
+                  <div class="log-body">Investigated intermittent internet in Logistic office. Ongoing.<span
+                          class="log-tag">network</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 05 · HANDOVER               -->
+    <!-- ════════════════════════════ -->
+    <div id="s-handover" class="screen">
+      <div class="screen-label">Screen 05 · Handover Notes</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Handover Notes</div>
+          <div class="tb-right">
+            <div class="tb-badge badge-staff">staff</div>
+            <div class="tb-avatar av-staff">Itusers</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Main</div>
+            <div class="nav-item"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item"><span class="nav-icon">◫</span> Task Board</div>
+            <div class="nav-item"><span class="nav-icon">≡</span> Daily Log</div>
+            <div class="nav-item active"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="pg-title">Handover Notes</div>
+          <div class="pg-sub">// Context for the next IT person · 4 active notes</div>
+          <div class="alert alert-amber">⚠ &nbsp;1 month left in service — ensure all handover notes are complete before
+            departure.</div>
+          <div class="two-col" style="align-items:start;">
+            <div>
+              <div class="sec-hd">
+                <div class="sec-title">Active notes</div><button class="btn btn-soft-green btn-sm">+ Add note</button>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div class="ho-card">
+                  <div class="ho-title">Server room access</div>
+                  <div class="ho-body">Key is always at the security post(gate-2). Sign access log when before picking the key.</div>
+                  <div class="ho-foot">
+                    <div class="ho-date">Updated 28 Mar</div>
+                    <div class="ho-active">active</div>
+                  </div>
+                </div>
+                <div class="ho-card">
+                  <div class="ho-title">ISP contact details</div>
+                  <div class="ho-body">FibreOne: 0700-587-000 · Account: UAC-444444444. Call if down 30+ min.</div>
+                  <div class="ho-foot">
+                    <div class="ho-date">Updated 25 Mar</div>
+                    <div class="ho-active">active</div>
+                  </div>
+                </div>
+                <div class="ho-card">
+                  <div class="ho-title">Production office Printer — known issue</div>
+                  <div class="ho-body">Recurring jam. Roller ordered (~1 week). Use Logistic office printer meanwhile.</div>
+                  <div class="ho-foot">
+                    <div class="ho-date">Added today</div>
+                    <div class="ho-active">active</div>
+                  </div>
+                </div>
+                <div class="ho-card">
+                  <div class="ho-title">Admin credentials register</div>
+                  <div class="ho-body">All admin passwords are in the physical IT register in the office drawer. Never
+                    store digitally.</div>
+                  <div class="ho-foot">
+                    <div class="ho-date">Updated 20 Mar</div>
+                    <div class="ho-active">active</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-card">
+              <div
+                   style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px;">
+                New handover note</div>
+              <div class="f-grp">
+                <label class="f-label">Title</label>
+                <input class="f-input" placeholder="e.g. UPS maintenance schedule">
+              </div>
+              <div class="f-grp">
+                <label class="f-label">Content</label>
+                <textarea class="f-textarea" style="min-height:90px;"
+                          placeholder="What does the next person need to know?"></textarea>
+              </div>
+              <button class="btn btn-green">Save note →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 06 · MANAGER VIEW           -->
+    <!-- ════════════════════════════ -->
+    <div id="s-manager" class="screen">
+      <div class="screen-label">Screen 06 · Manager Dashboard — Overview + Task Management</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Manager View</div>
+          <div class="tb-right">
+            <button class="btn btn-soft-green btn-sm">+ Create &amp; Assign Task</button>
+            <div class="tb-badge badge-manager">manager</div>
+            <div class="tb-avatar av-manager">LM</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Overview</div>
+            <div class="nav-item active"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item"><span class="nav-icon">◫</span> All Tasks <span class="nav-count">8</span></div>
+            <div class="nav-item"><span class="nav-icon">≡</span> Activity Logs</div>
+            <div class="nav-item"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-sec">
+            <div class="sb-label">Actions</div>
+            <div class="nav-item" style="color:var(--uac-green-dk);font-weight:600;background:var(--uac-green-soft);">
+              <span class="nav-icon">✦</span> Create &amp; Assign Task
+            </div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-push"></div>
+          <div class="sb-sec">
+            <div class="nav-item" style="color:var(--uac-red);font-size:11px;"><span class="nav-icon">←</span> Sign out
+            </div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="mgr-banner">
+            <div style="font-size:22px;">📋</div>
+            <div class="mgr-banner-text">
+              <div class="mgr-title">Manager Dashboard</div>
+              <div class="mgr-sub">// View + create + assign tasks · Dairies Plant IT · 31 Mar 2026</div>
+            </div>
+            <div class="mgr-create-badge">can create tasks</div>
+          </div>
+          <div class="stats">
+            <div class="stat s-red">
+              <div class="stat-l">Open tasks</div>
+              <div class="stat-v">5</div>
+            </div>
+            <div class="stat s-amber">
+              <div class="stat-l">In progress</div>
+              <div class="stat-v">2</div>
+            </div>
+            <div class="stat s-green">
+              <div class="stat-l">Done this week</div>
+              <div class="stat-v">8</div>
+            </div>
+            <div class="stat">
+              <div class="stat-l">Log entries today</div>
+              <div class="stat-v">4</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="sec-hd">
+                <div class="sec-title">All tasks</div>
+                <button class="btn btn-green btn-sm">+ Create &amp; Assign</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div class="task-card p-high">
+                  <div class="tc-title">Escalate printer issue to the Vendor</div>
+                  <div class="tc-meta"><span class="tag t-urg">urgent</span><span class="pill p-todo">todo</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to Adesina <span style="margin-left:auto;"
+                          class="pill p-todo">by you</span>
+                  </div>
+                </div>
+                <div class="task-card p-high">
+                  <div class="tc-title">Fix printer on floor 2 — paper jam</div>
+                  <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="pill p-wip">in progress</span>
+                  </div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to Adesina
+                  </div>
+                </div>
+                <div class="task-card p-med">
+                  <div class="tc-title">Reset WiFi password for production</div>
+                  <div class="tc-meta"><span class="tag t-net">network</span><span class="pill p-todo">todo</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-s">AD</div> Assigned to Adesina <span style="margin-left:auto;"
+                          class="pill p-todo">by you</span>
+                  </div>
+                </div>
+                <div class="task-card" style="opacity:0.65;">
+                  <div class="tc-title">Run Windows update on OM laptop</div>
+                  <div class="tc-meta"><span class="tag t-sw">software</span><span class="pill p-done">done</span></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="sec-hd" style="margin-bottom:9px;">
+                <div class="sec-title">Today's activity</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div class="log-entry">
+                  <div class="log-time">09:00</div>
+                  <div class="log-body">Routine system checks on all admin machines.<span class="log-tag">routine</span>
+                  </div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">10:15</div>
+                  <div class="log-body">Production office printer — paper jam. Roller ordered.<span
+                          class="log-tag">hardware</span></div>
+                </div>
+                <div class="log-entry">
+                  <div class="log-time">13:30</div>
+                  <div class="log-body">Configured new laptop for HR manager.<span class="log-tag">setup</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 07 · MANAGER CREATE TASK    -->
+    <!-- ════════════════════════════ -->
+    <div id="s-mgr-create" class="screen">
+      <div class="screen-label">Screen 07 · Manager — Create &amp; Assign Task</div>
+      <div class="app-shell">
+        <div class="topbar">
+          <div class="tb-logo">
+            <div class="tb-logo-dot"></div>IT DESK
+          </div>
+          <div class="tb-div"></div>
+          <div class="tb-sub">Create Task</div>
+          <div class="tb-right">
+            <div class="tb-badge badge-manager">manager</div>
+            <div class="tb-avatar av-manager">LM</div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="sb-sec">
+            <div class="sb-label">Overview</div>
+            <div class="nav-item"><span class="nav-icon">⬡</span> Dashboard</div>
+            <div class="nav-item"><span class="nav-icon">◫</span> All Tasks <span class="nav-count">8</span></div>
+            <div class="nav-item"><span class="nav-icon">≡</span> Activity Logs</div>
+            <div class="nav-item"><span class="nav-icon">⇄</span> Handover Notes</div>
+          </div>
+          <div class="sb-div"></div>
+          <div class="sb-sec">
+            <div class="sb-label">Actions</div>
+            <div class="nav-item active"><span class="nav-icon">✦</span> Create &amp; Assign Task</div>
+          </div>
+        </div>
+        <div class="main">
+          <div class="pg-title">Create &amp; Assign Task</div>
+          <div class="pg-sub">// Manager action · Task will appear on the assigned staff member's board immediately
+          </div>
+          <div class="alert alert-green">✓ &nbsp;As manager, you can create tasks and assign them directly to IT staff.
+            Assigned tasks are flagged on the staff board.</div>
+          <div class="two-col" style="align-items:start;">
+            <div class="form-card">
+              <div
+                   style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:14px;">
+                Task details</div>
+              <div class="f-grp">
+                <label class="f-label">Task title</label>
+                <input class="f-input" value="Inspect network switch in server room" readonly>
+              </div>
+              <div class="f-grp">
+                <label class="f-label">Description</label>
+                <textarea class="f-textarea"
+                          readonly>The network switch in the server room has been running hot. Please inspect the cooling, check the port indicator lights for any errors, and report back with findings before end of day.</textarea>
+              </div>
+              <div class="f-row">
+                <div class="f-grp" style="margin-bottom:0;">
+                  <label class="f-label">Category</label>
+                  <select class="f-select">
+                    <option>Network</option>
+                    <option>Hardware</option>
+                    <option>Software</option>
+                  </select>
+                </div>
+                <div class="f-grp" style="margin-bottom:0;">
+                  <label class="f-label">Priority</label>
+                  <select class="f-select">
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                  </select>
+                </div>
+              </div>
+              <div style="height:12px;"></div>
+              <div class="f-grp" style="margin-bottom:0;">
+                <label class="f-label">Due date (optional)</label>
+                <input class="f-input" style="font-family:var(--mono);font-size:11px;"
+                       value="31 March 2026 — End of Day" readonly>
+              </div>
+            </div>
+            <div>
+              <div class="form-card" style="margin-bottom:12px;">
+                <div
+                     style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px;">
+                  Assign to staff member</div>
+                <div class="f-grp" style="margin-bottom:12px;">
+                  <label class="f-label">Assignee</label>
+                  <select class="f-select">
+                    <option selected>Adesina (IT Support — Dairies Plant)</option>
+                    <option>Unassigned</option>
+                  </select>
+                </div>
+                <div class="assigned-section">
+                  <div class="assign-av av-s" style="width:28px;height:28px;font-size:10px;">AD</div>
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--uac-green-dk);">Adesina</div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--uac-green);">IT Support · Dairies
+                      Plant · 2 open tasks</div>
+                  </div>
+                  <div style="margin-left:auto;">
+                    <div class="tb-badge badge-staff">staff</div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-detail">
+                <div
+                     style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:10px;">
+                  Preview — how it appears on staff board</div>
+                <div class="task-card p-high" style="cursor:default;">
+                  <div class="tc-title">Inspect network switch in server room</div>
+                  <div class="tc-meta"><span class="tag t-net">network</span><span class="pill p-todo">todo</span><span
+                          class="tc-time">due today</span></div>
+                  <div class="tc-assign">
+                    <div class="assign-av av-m">LM</div>
+                    <span style="color:var(--purple);font-family:var(--mono);font-size:9px;">assigned by manager</span>
+                  </div>
+                </div>
+                <div style="font-family:var(--mono);font-size:9px;color:var(--ink5);margin-top:8px;">↑ The purple
+                  "assigned by manager" label flags this as a manager-created task</div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:8px;">
+                <button class="btn btn-green" style="flex:1;justify-content:center;">Assign task →</button>
+                <button class="btn btn-ghost">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 08 · SHARED REPORT          -->
+    <!-- ════════════════════════════ -->
+    <div id="s-report" class="screen">
+      <div class="screen-label">Screen 08 · Shareable Snapshot Report — Public, no login required</div>
+      <div class="report-shell">
+        <div class="report-hd">
+          <div>
+            <div class="rpt-logo">
+              <div class="rpt-dot"></div>IT DESK
+            </div>
+            <div class="rpt-meta">UAC Foods Dairies Plant · Daily Snapshot</div>
+          </div>
+          <div style="margin-left:20px;">
+            <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:2px;">Generated
+            </div>
+            <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.5);">Tue 31 Mar 2026, 2:45 PM
+            </div>
+          </div>
+          <div style="margin-left:16px;">
+            <div style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:2px;">By</div>
+            <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.5);">Adesina (IT Staff)</div>
+          </div>
+          <div class="rpt-exp">⏱ Expires in 23h 15m</div>
+        </div>
+        <div class="report-body">
+          <div class="rpt-stats">
+            <div class="rpt-stat">
+              <div class="rpt-n" style="color:var(--ink4);">3</div>
+              <div class="rpt-l">Open / Todo</div>
+            </div>
+            <div class="rpt-stat">
+              <div class="rpt-n" style="color:var(--amber);">2</div>
+              <div class="rpt-l">In Progress</div>
+            </div>
+            <div class="rpt-stat">
+              <div class="rpt-n" style="color:var(--uac-green);">3</div>
+              <div class="rpt-l">Done Today</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <div
+                   style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink5);margin-bottom:10px;">
+                Today's activity log</div>
+              <div class="rpt-log">
+                <div class="rpt-lt">09:00</div>Routine system checks on all admin machines — all normal.
+              </div>
+              <div class="rpt-log">
+                <div class="rpt-lt">10:15</div>Production office printer jam attended to. Replacement roller ordered.
+              </div>
+              <div class="rpt-log">
+                <div class="rpt-lt">13:30</div>New laptop configured for HR manager (OS + software).
+              </div>
+              <div class="rpt-log">
+                <div class="rpt-lt">15:00</div>Investigating intermittent internet in logistics office 1.
+              </div>
+            </div>
+            <div>
+              <div
+                   style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink5);margin-bottom:10px;">
+                Open tasks needing attention</div>
+              <div class="rpt-log">
+                <div class="rpt-lt" style="color:var(--uac-red);">HIGH</div>Escalate internet downtime to ISP — overdue
+              </div>
+              <div class="rpt-log">
+                <div class="rpt-lt" style="color:var(--amber);">OPEN</div>Reset WiFi password for production team
+              </div>
+              <div class="rpt-log">
+                <div class="rpt-lt" style="color:var(--amber);">WIP</div>Printer server setup — awaiting Vendor feedback (~1
+                week)
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <div
+                 style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink5);margin-bottom:10px;">
+              Active handover notes</div>
+            <div class="two-col">
+              <div
+                   style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;">
+                <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:4px;">Production office Printer — known
+                  issue</div>
+                <div style="font-size:10px;color:var(--ink3);line-height:1.7;">Recurring paper jam. Excallated to the Vendor (~1
+                  week). Use Logistics office printer in the meantime.</div>
+              </div>
+              <div
+                   style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;">
+                <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:4px;">ISP contact details
+                </div>
+                <div style="font-size:10px;color:var(--ink3);line-height:1.7;">FibreOne: 0700-444434345 · Account
+                  UAC-DAI-009. Call if connectivity down 30+ min.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px;align-items:center;">
+        <div class="token-box">itdesk.app/report/V6d9Kp2mXqRt<button class="token-copy">Copy</button></div>
+        <button class="btn btn-green">Send to WhatsApp ↗</button>
+        <button class="btn btn-ghost">Download PDF</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ -->
+    <!-- 09 · DESIGN TOKENS          -->
+    <!-- ════════════════════════════ -->
+    <div id="s-tokens" class="screen">
+      <div class="screen-label">Screen 09 · Design Tokens &amp; Component Library</div>
+      <div
+           style="font-family:var(--mono);font-size:10px;color:var(--ink4);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">
+        UAC Foods brand colours</div>
+      <div class="swatch-grid">
+        <div class="swatch">
+          <div class="sw-color" style="background:#C8102E;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Red</div>
+            <div class="sw-hex">#C8102E · Primary brand</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#9B0B22;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Red Dark</div>
+            <div class="sw-hex">#9B0B22 · Hover states</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#6E0718;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Red Deep</div>
+            <div class="sw-hex">#6E0718 · Topbar/header</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#FCEDEF;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Red Soft</div>
+            <div class="sw-hex">#FCEDEF · Backgrounds</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#00793A;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Green</div>
+            <div class="sw-hex">#00793A · Actions/CTAs</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#005A2A;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Green Dark</div>
+            <div class="sw-hex">#005A2A · Hover/text</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#E6F4EC;"></div>
+          <div class="sw-info">
+            <div class="sw-name">UAC Green Soft</div>
+            <div class="sw-hex">#E6F4EC · Backgrounds</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#FFFFFF;border:1px solid #E3E1DB;"></div>
+          <div class="sw-info">
+            <div class="sw-name">White</div>
+            <div class="sw-hex">#FFFFFF · Surfaces</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#111318;"></div>
+          <div class="sw-info">
+            <div class="sw-name">Ink</div>
+            <div class="sw-hex">#111318 · Text</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#F6F5F2;"></div>
+          <div class="sw-info">
+            <div class="sw-name">Paper</div>
+            <div class="sw-hex">#F6F5F2 · Page bg</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#C97000;"></div>
+          <div class="sw-info">
+            <div class="sw-name">Amber</div>
+            <div class="sw-hex">#C97000 · In progress</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="sw-color" style="background:#6C2BD9;"></div>
+          <div class="sw-info">
+            <div class="sw-name">Purple</div>
+            <div class="sw-hex">#6C2BD9 · Manager role</div>
+          </div>
+        </div>
+      </div>
+      <div
+           style="font-family:var(--mono);font-size:10px;color:var(--ink4);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">
+        Typography — Plus Jakarta Sans + JetBrains Mono</div>
+      <div class="type-scale">
+        <div class="tr">
+          <div class="tr-meta">26px / 700<br>Jakarta display</div>
+          <div style="font-size:26px;font-weight:700;font-family:var(--sans);color:var(--ink);letter-spacing:-0.03em;">
+            Page headings</div>
+        </div>
+        <div class="tr">
+          <div class="tr-meta">18px / 700<br>Jakarta title</div>
+          <div style="font-size:18px;font-weight:700;font-family:var(--sans);color:var(--ink);letter-spacing:-0.02em;">
+            Section titles</div>
+        </div>
+        <div class="tr">
+          <div class="tr-meta">12px / 500<br>Jakarta body</div>
+          <div style="font-size:12px;font-weight:500;font-family:var(--sans);color:var(--ink2);">Task titles, log
+            entries, note content, form text</div>
+        </div>
+        <div class="tr">
+          <div class="tr-meta">10px / 600<br>JetBrains Mono</div>
+          <div
+               style="font-size:10px;font-family:var(--mono);font-weight:600;color:var(--ink3);letter-spacing:0.07em;text-transform:uppercase;">
+            LABELS · TIMESTAMPS · BADGES · STATUS</div>
+        </div>
+        <div class="tr">
+          <div class="tr-meta">9px / 400<br>JetBrains Mono</div>
+          <div style="font-size:9px;font-family:var(--mono);color:var(--ink5);">Secondary meta · helper text · report
+            tokens · time values</div>
+        </div>
+      </div>
+      <div
+           style="font-family:var(--mono);font-size:10px;color:var(--ink4);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">
+        Components</div>
+      <div class="comp-row">
+        <button class="btn btn-red">Primary action</button>
+        <button class="btn btn-green">Confirm / Save</button>
+        <button class="btn btn-ghost">Secondary</button>
+        <button class="btn btn-soft-green">+ Add task</button>
+        <button class="btn btn-soft-red">Delete</button>
+        <button class="btn btn-outline-green">Share report</button>
+      </div>
+      <div class="comp-row">
+        <span class="pill p-todo">todo</span>
+        <span class="pill p-wip">in progress</span>
+        <span class="pill p-done">done</span>
+        <span class="tag t-hw">hardware</span>
+        <span class="tag t-net">network</span>
+        <span class="tag t-sw">software</span>
+        <span class="tag t-urg">urgent</span>
+        <span class="tb-badge badge-staff">staff</span>
+        <span class="tb-badge badge-manager">manager</span>
+        <span class="tb-badge badge-admin">admin</span>
+        <span class="ho-active">active</span>
+      </div>
+      <div class="comp-row" style="align-items:stretch;overflow-x:auto;flex-wrap:nowrap;">
+        <div class="task-card p-high" style="min-width:180px;">
+          <div class="tc-title">Fix printer at production office</div>
+          <div class="tc-meta"><span class="tag t-hw">hardware</span><span class="pill p-wip">in progress</span></div>
+          <div class="tc-assign">
+            <div class="assign-av av-s">AD</div> Assigned to staff
+          </div>
+        </div>
+        <div class="task-card p-med" style="min-width:180px;">
+          <div class="tc-title">Reset WiFi password</div>
+          <div class="tc-meta"><span class="tag t-net">network</span><span class="pill p-todo">todo</span></div>
+          <div class="tc-assign">
+            <div class="assign-av av-m">LM</div><span
+                  style="color:var(--purple);font-family:var(--mono);font-size:9px;">assigned by manager</span>
+          </div>
+        </div>
+        <div class="log-entry" style="min-width:240px;">
+          <div class="log-time">09:00</div>
+          <div class="log-body">Routine system checks — all normal.<span class="log-tag">routine</span></div>
+        </div>
+        <div class="ho-card" style="min-width:200px;flex-shrink:0;">
+          <div class="ho-title">Server room access</div>
+          <div class="ho-body">Key is at the security post. Sign access log.</div>
+          <div class="ho-foot">
+            <div class="ho-date">28 Mar</div>
+            <div class="ho-active">active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function show(name, btn) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.screen-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('s-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
