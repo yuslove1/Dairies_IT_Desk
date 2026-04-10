@@ -1,0 +1,126 @@
+import type { Task } from "@/types";
+import { staffList, managerUser } from "./staff";
+
+const adesina = staffList[0];
+
+export const tasks: Task[] = [
+  {
+    id: "t1",
+    title: "Fix printer on production office — paper jam recurring",
+    category: "hardware",
+    priority: "high",
+    status: "wip",
+    assignedTo: adesina,
+    createdAt: "09:14",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t2",
+    title: "Reset WiFi password for production team",
+    category: "network",
+    priority: "med",
+    status: "todo",
+    assignedTo: adesina,
+    assignedBy: managerUser,
+    createdAt: "10:02",
+    isManagerAssigned: true,
+  },
+  {
+    id: "t3",
+    title: "Install antivirus on new admin laptop",
+    category: "software",
+    priority: "low",
+    status: "done",
+    assignedTo: adesina,
+    createdAt: "08:30",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t4",
+    title: "Check UPS battery in server room",
+    category: "hardware",
+    priority: "low",
+    status: "todo",
+    assignedTo: adesina,
+    createdAt: "tomorrow",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t5",
+    title: "Escalate internet downtime to ISP",
+    category: "urgent",
+    priority: "high",
+    status: "todo",
+    assignedTo: adesina,
+    assignedBy: managerUser,
+    createdAt: "overdue",
+    isManagerAssigned: true,
+  },
+  {
+    id: "t6",
+    title: "Update Windows on all admin computers",
+    category: "software",
+    priority: "med",
+    status: "wip",
+    assignedTo: adesina,
+    createdAt: "ongoing",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t7",
+    title: "Install Sophos on UFL-N-DAI-050",
+    category: "software",
+    priority: "low",
+    status: "done",
+    assignedTo: adesina,
+    createdAt: "08:30",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t8",
+    title: "Set up email account for new HR staff",
+    category: "software",
+    priority: "low",
+    status: "done",
+    assignedTo: adesina,
+    createdAt: "Mon",
+    isManagerAssigned: false,
+  },
+  {
+    id: "t9",
+    title: "Replace keyboard on reception desk",
+    category: "hardware",
+    priority: "low",
+    status: "done",
+    assignedTo: adesina,
+    createdAt: "Mon",
+    isManagerAssigned: false,
+  },
+  // Manager-view tasks
+  {
+    id: "t10",
+    title: "Escalate printer issue to the Vendor",
+    category: "urgent",
+    priority: "high",
+    status: "todo",
+    assignedTo: adesina,
+    assignedBy: managerUser,
+    createdAt: "today",
+    isManagerAssigned: true,
+  },
+  {
+    id: "t11",
+    title: "Run Windows update on OM laptop",
+    category: "software",
+    priority: "low",
+    status: "done",
+    assignedTo: adesina,
+    createdAt: "today",
+    isManagerAssigned: false,
+  },
+];
+
+// Helpers
+export const todoTasks = tasks.filter((t) => t.status === "todo");
+export const wipTasks = tasks.filter((t) => t.status === "wip");
+export const doneTasks = tasks.filter((t) => t.status === "done");
