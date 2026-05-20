@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { saveSession } from "@/lib/auth";
@@ -9,7 +9,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN = 60;
 
-export default function VerifyOtpPage() {
+function VerifyOtpContent() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const email        = searchParams.get("email") ?? "";
@@ -209,5 +209,13 @@ export default function VerifyOtpPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyOtpPage() {
+  return (
+    <Suspense>
+      <VerifyOtpContent />
+    </Suspense>
   );
 }
