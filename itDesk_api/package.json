@@ -4,8 +4,12 @@
   "description": "IT Desk REST API — UAC Foods Dairies Plant",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev":   "nodemon index.js",
+    "build": "npx prisma generate && npx prisma migrate deploy",
     "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
