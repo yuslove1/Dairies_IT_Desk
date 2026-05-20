@@ -6,12 +6,28 @@ export type TaskCategory = "hardware" | "network" | "software" | "urgent";
 export type LogCategory = "routine" | "hardware" | "network" | "software" | "setup";
 export type UserRole = "staff" | "manager" | "admin";
 
+// ── Asset Management ──
+export type AssetType =
+  | "laptop"
+  | "desktop"
+  | "printer"
+  | "ups"
+  | "switch"
+  | "server"
+  | "monitor"
+  | "phone"
+  | "keyboard"
+  | "other";
+
+export type AssetStatus = "active" | "in_repair" | "retired" | "unassigned";
+
 export interface User {
-  id: string;
-  name: string;
-  initials: string;
-  role: UserRole;
-  department: string;
+  id:            string;
+  name:          string;
+  initials:      string;
+  email?:        string;   // optional — populated from session storage
+  role:          UserRole;
+  department:    string;
   openTaskCount?: number;
 }
 
@@ -56,7 +72,21 @@ export interface ReportSnapshot {
   handoverNotes: HandoverNote[];
 }
 
-// Sidebar nav item shape
+export interface Asset {
+  id: string;
+  name: string;           // e.g. "HP LaserJet Pro M404dn"
+  type: AssetType;
+  serialNumber?: string;  // often found on a sticker on the device
+  location: string;       // physical location e.g. "Production Office"
+  department: string;     // owning department e.g. "HR"
+  status: AssetStatus;
+  purchaseDate?: string;  // ISO date string "YYYY-MM-DD"
+  warrantyExpiry?: string;
+  notes?: string;
+  addedAt: string;        // display string e.g. "12 Jan 2025"
+}
+
+// ── Sidebar nav item shape ──
 export interface NavItem {
   label: string;
   icon: string;
