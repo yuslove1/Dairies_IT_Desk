@@ -1,0 +1,180 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// prisma/schema.prisma
+//
+// WHAT IS THIS FILE?
+// Prisma uses this schema to understand your database structure.
+// Every model here becomes a table in PostgreSQL.
+// After any change to this file, run:  npx prisma migrate dev --name describe_your_change
+//
+// WHAT IS AN ENUM?
+// An enum restricts a field to a fixed set of allowed values.
+// e.g. a Task's status can only ever be "todo", "wip", or "done".
+// The database enforces this — you can't accidentally save "in progress" (typo).
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // Prisma reads DATABASE_URL from your .env file automatically.
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enums ─────────────────────────────────────────────────────────────────────
+
+enum Role {
+  staff    // daily IT work — full CRUD on tasks/logs/assets
+  manager  // read-only dashboard
+  admin    // can register users, assign roles
+}
+
+enum TaskStatus {
+  todo  // not started
+  wip   // work in progress
+  done  // completed
+}
+
+enum TaskCategory {
+  hardware
+  network
+  software
+  urgent
+}
+
+enum Priority {
+  high
+  med
+  low
+}
+
+enum LogCategory {
+  routine
+  hardware
+  network
+  software
+  setup
+}
+
+enum AssetType {
+  laptop
+  desktop
+  printer
+  ups
+  switch_device  // "switch" is a reserved word in some DBs, so we use switch_device
+  server
+  monitor
+  phone
+  keyboard
+  other
+}
+
+enum AssetStatus {
+  active
+  in_repair
+  retired
+  unassigned
+}
+
+// ── Models ────────────────────────────────────────────────────────────────────
+
+// WHY @default(uuid())?
+// We generate UUIDs (long random IDs like "550e8400-e29b-41d4-a716") at the
+// database level. This is safer than sequential IDs (1, 2, 3...) because
+// sequential IDs are guessable — someone could enumerate /api/tasks/1, /2, /3.
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  passwordHash     String
+  name             String
+  role             Role      @default(staff)
+  isVerified       Boolean   @default(false)   // must verify email before logging in
+  verificationOtp  String?                     // 6-digit code — null after verification
+  otpExpiresAt     DateTime?                   // 10 min window
+  createdAt        DateTime  @default(now())
+
+  tasks     Task[]
+  logs      Log[]
+  handovers HandoverNote[]
+  reports   Report[]
+  assets    Asset[]
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  title       String
+  description String?      // the ? means optional
+  category    TaskCategory @default(hardware)
+  priority    Priority     @default(med)
+  status      TaskStatus   @default(todo)
+  assignedTo  String?      // user id — who is doing the work
+  dueDate     DateTime?
+
+  // createdBy stores the user ID of whoever created the task.
+  // The @relation line tells Prisma how to join the tables.
+  createdBy   String
+  author      User         @relation(fields: [createdBy], references: [id])
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt  // auto-updates every time the row changes
+}
+
+model Log {
+  id          String      @id @default(uuid())
+  content     String
+  category    LogCategory @default(routine)
+  logDate     DateTime    @default(now())
+
+  createdBy   String
+  author      User        @relation(fields: [createdBy], references: [id])
+
+  createdAt   DateTime    @default(now())
+}
+
+model HandoverNote {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  isActive  Boolean  @default(true)  // false = archived, won't show to next person
+
+  createdBy String
+  author    User     @relation(fields: [createdBy], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// WHY Json for snapshot?
+// A report is a frozen copy of data at a point in time.
+// We store it as a JSON blob so it never changes even if tasks/logs are later
+// edited or deleted. It's a "snapshot" — like a screenshot of the database.
+model Report {
+  id        String   @id @default(uuid())
+  token     String   @unique  // nanoid short string — used in the public URL
+  snapshot  Json               // the full data payload
+  expiresAt DateTime           // 24 hours after creation
+  createdBy String
+  author    User     @relation(fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Asset {
+  id             String      @id @default(uuid())
+  name           String
+  type           AssetType
+  serialNumber   String?
+  location       String
+  department     String
+  status         AssetStatus @default(active)
+  purchaseDate   DateTime?
+  warrantyExpiry DateTime?
+  notes          String?
+
+  addedBy   String
+  author    User     @relation(fields: [addedBy], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
