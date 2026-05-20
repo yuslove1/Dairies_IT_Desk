@@ -3,10 +3,10 @@ import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 
 interface TopbarProps {
-  user: User;
+  user: User | null;
   subtitle?: string;
   actions?: React.ReactNode;
-  onMenuToggle?: () => void; // triggers mobile sidebar drawer
+  onMenuToggle?: () => void;
 }
 
 /** App topbar — deep red with green underline.
@@ -46,8 +46,8 @@ export function Topbar({ user, subtitle, actions, onMenuToggle }: TopbarProps) {
       {/* Right side */}
       <div className="ml-auto flex items-center gap-2">
         {actions}
-        <Badge role={user.role} />
-        <Avatar initials={user.initials} role={user.role} size="md" />
+        {user && <Badge role={user.role} />}
+        <Avatar initials={user?.initials ?? "…"} role={user?.role ?? "staff"} size="md" />
       </div>
     </header>
   );

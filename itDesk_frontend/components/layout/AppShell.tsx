@@ -7,7 +7,7 @@ import { Sidebar } from "./Sidebar";
 import { cn } from "@/lib/utils";
 
 interface AppShellProps {
-  user: User;
+  user: User | null;
   subtitle?: string;
   topbarActions?: React.ReactNode;
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export function AppShell({ user, subtitle, topbarActions, children }: AppShellPr
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col rounded-[14px] overflow-hidden border border-border shadow-[0_4px_20px_rgba(17,19,24,0.10)] min-h-[580px]">
+    <div className="flex flex-col h-full overflow-hidden bg-paper">
       {/* Topbar — full width */}
       <Topbar
         user={user}
@@ -31,7 +31,7 @@ export function AppShell({ user, subtitle, topbarActions, children }: AppShellPr
         onMenuToggle={() => setSidebarOpen((v) => !v)}
       />
 
-      {/* Shell body */}
+      {/* Shell body — fills remaining height */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Mobile backdrop — closes sidebar on click */}
         {sidebarOpen && (
@@ -50,7 +50,7 @@ export function AppShell({ user, subtitle, topbarActions, children }: AppShellPr
             sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           )}
         >
-          <Sidebar role={user.role} onClose={() => setSidebarOpen(false)} />
+          <Sidebar role={user?.role ?? "staff"} user={user} onClose={() => setSidebarOpen(false)} />
         </div>
 
         {/* Main content */}
