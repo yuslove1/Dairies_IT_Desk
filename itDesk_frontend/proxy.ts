@@ -28,7 +28,6 @@ const PROTECTED_PATHS = [
   "/handover",
   "/assets",
   "/manager",
-  "/report", // token-based but let the page handle expiry
 ];
 
 // Routes only managers can access

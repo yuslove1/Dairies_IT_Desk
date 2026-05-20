@@ -36,9 +36,14 @@ export default function ReportPage() {
   const [status,    setStatus]    = useState<"loading" | "ok" | "expired" | "notfound" | "error">("loading");
   const [copied,    setCopied]    = useState(false);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+
   useEffect(() => {
     if (!token) return;
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reports/${token}`)
+
+    const url = API_URL ? `${API_URL}/api/reports/${token}` : `/api/reports/${token}`;
+
+    fetch(url)
       .then(async (res) => {
         if (res.status === 410) { setStatus("expired"); return; }
         if (res.status === 404) { setStatus("notfound"); return; }
@@ -49,7 +54,7 @@ export default function ReportPage() {
         setStatus("ok");
       })
       .catch(() => setStatus("error"));
-  }, [token]);
+  }, [token, API_URL]);
 
   function copyLink() {
     navigator.clipboard.writeText(window.location.href).then(() => {
