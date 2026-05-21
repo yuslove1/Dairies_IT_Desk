@@ -35,10 +35,10 @@ function EditNoteModal({
   onClose: () => void;
   onUpdated: (n: HandoverNote) => void;
 }) {
-  const [title,   setTitle]   = useState(note.title);
+  const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
-  const [saving,  setSaving]  = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -110,13 +110,13 @@ function EditNoteModal({
 export default function HandoverPage() {
   const user = useCurrentUser();
 
-  const [notes,        setNotes]        = useState<HandoverNote[]>([]);
-  const [loading,      setLoading]      = useState(true);
-  const [saving,       setSaving]       = useState(false);
-  const [error,        setError]        = useState<string | null>(null);
-  const [title,        setTitle]        = useState("");
-  const [content,      setContent]      = useState("");
-  const [editingNote,  setEditingNote]  = useState<HandoverNote | null>(null);
+  const [notes, setNotes] = useState<HandoverNote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [editingNote, setEditingNote] = useState<HandoverNote | null>(null);
 
   const canManage = user?.role === "admin" || user?.role === "manager";
 
@@ -169,9 +169,9 @@ export default function HandoverPage() {
           {canManage && <span className="ml-2 text-uac-green">· hover a note to edit or delete</span>}
         </p>
 
-        <Alert variant="amber">
+        {/* <Alert variant="amber">
           ⚠&nbsp; 1 month left in service — ensure all handover notes are complete before departure.
-        </Alert>
+        </Alert> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
           {/* Active notes */}
