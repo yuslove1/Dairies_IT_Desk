@@ -1,33 +1,21 @@
-// src/utils/sendOtp.js — Sends OTP verification emails via Nodemailer
+// src/utils/sendOtp.js — Sends OTP verification emails via Resend API
 //
 // HOW IT WORKS:
-// Nodemailer creates a "transporter" using your SMTP credentials.
-// We call transporter.sendMail() with the OTP embedded in a styled HTML email.
+// We use the Resend HTTP API instead of SMTP. This bypasses Render's firewall
+// because it runs over standard HTTPS (port 443).
 //
 // SETUP:
-// Add these to your .env file:
-//   EMAIL_HOST=smtp.gmail.com
-//   EMAIL_PORT=587
-//   EMAIL_USER=your@gmail.com
-//   EMAIL_PASS=your-gmail-app-password   ← NOT your normal password
-//   EMAIL_FROM="IT Desk <noreply@uacfoods.com>"
+// Add this to your Render Environment Variables:
+//   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
 //
-// For Gmail, generate an App Password at:
-//   https://myaccount.google.com/apppasswords
-//   (requires 2-Step Verification to be enabled)
+// IMPORTANT NOTE ABOUT RESEND'S FREE TIER:
+// Until you verify a custom domain in the Resend dashboard, you MUST send emails 
+// from "onboarding@resend.dev", and you can ONLY send emails to the email address 
+// you used to sign up for Resend.
 
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-// Build transporter once — reused for all emails
-const transporter = nodemailer.createTransport({
-  host:   process.env.EMAIL_HOST || "smtp.gmail.com",
-  port:   parseInt(process.env.EMAIL_PORT || "587"),
-  secure: process.env.EMAIL_PORT === "465", // true for port 465, false for 587
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Sends a 6-digit OTP to the given email address.
@@ -36,7 +24,8 @@ const transporter = nodemailer.createTransport({
  * @param {string} otp     — the 6-digit code
  */
 async function sendOtp(to, name, otp) {
-  const from = process.env.EMAIL_FROM || `"IT Desk" <${process.env.EMAIL_USER}>`;
+  // If no EMAIL_FROM is provided, default to the Resend testing email
+  const from = process.env.EMAIL_FROM || "IT Desk <onboarding@resend.dev>";
 
   // Split OTP into individual digits for the styled box layout
   const digits = otp.split("").map(
@@ -110,13 +99,18 @@ async function sendOtp(to, name, otp) {
 </body>
 </html>`;
 
-  await transporter.sendMail({
+  const { data, error } = await resend.emails.send({
     from,
     to,
     subject: `${otp} is your IT Desk verification code`,
-    text:    `Your IT Desk verification code is: ${otp}\n\nIt expires in 10 minutes.\n\nIf you didn't sign up, ignore this email.`,
     html,
   });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }
 
 module.exports = { sendOtp };
