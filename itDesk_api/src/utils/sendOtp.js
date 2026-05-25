@@ -1,33 +1,13 @@
-// src/utils/sendOtp.js — Sends OTP verification emails via Nodemailer
+// src/utils/sendOtp.js — Sends OTP verification emails via Brevo HTTP API
 //
 // HOW IT WORKS:
-// Nodemailer creates a "transporter" using your SMTP credentials.
-// We call transporter.sendMail() with the OTP embedded in a styled HTML email.
+// We use the Brevo HTTP API instead of SMTP. This bypasses Render's firewall
+// because it runs over standard HTTPS (port 443).
 //
 // SETUP:
-// Add these to your .env file:
-//   EMAIL_HOST=smtp.gmail.com
-//   EMAIL_PORT=587
-//   EMAIL_USER=your@gmail.com
-//   EMAIL_PASS=your-gmail-app-password   ← NOT your normal password
-//   EMAIL_FROM="IT Desk <noreply@uacfoods.com>"
-//
-// For Gmail, generate an App Password at:
-//   https://myaccount.google.com/apppasswords
-//   (requires 2-Step Verification to be enabled)
-
-const nodemailer = require("nodemailer");
-
-// Build transporter once — reused for all emails
-const transporter = nodemailer.createTransport({
-  host:   process.env.EMAIL_HOST || "smtp.gmail.com",
-  port:   parseInt(process.env.EMAIL_PORT || "587"),
-  secure: process.env.EMAIL_PORT === "465", // true for port 465, false for 587
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Add these to your Render Environment Variables:
+//   BREVO_API_KEY=xkeysib-...
+//   EMAIL_FROM=your-verified-brevo-sender@gmail.com
 
 /**
  * Sends a 6-digit OTP to the given email address.
@@ -36,7 +16,13 @@ const transporter = nodemailer.createTransport({
  * @param {string} otp     — the 6-digit code
  */
 async function sendOtp(to, name, otp) {
-  const from = process.env.EMAIL_FROM || `"IT Desk" <${process.env.EMAIL_USER}>`;
+  // Use the verified sender email from the environment variable
+  const senderEmail = process.env.EMAIL_FROM;
+
+  if (!process.env.BREVO_API_KEY) {
+    console.error("Missing BREVO_API_KEY environment variable");
+    return;
+  }
 
   // Split OTP into individual digits for the styled box layout
   const digits = otp.split("").map(
@@ -110,13 +96,38 @@ async function sendOtp(to, name, otp) {
 </body>
 </html>`;
 
-  await transporter.sendMail({
-    from,
-    to,
+  const payload = {
+    sender: {
+      name: "IT Desk",
+      email: senderEmail,
+    },
+    to: [
+      {
+        email: to,
+        name: name,
+      }
+    ],
     subject: `${otp} is your IT Desk verification code`,
-    text:    `Your IT Desk verification code is: ${otp}\n\nIt expires in 10 minutes.\n\nIf you didn't sign up, ignore this email.`,
-    html,
+    htmlContent: html,
+  };
+
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify(payload),
   });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(`Brevo API error: ${response.status} - ${JSON.stringify(errorData)}`);
+  }
+
+  const data = await response.json();
+  return data;
 }
 
 module.exports = { sendOtp };
