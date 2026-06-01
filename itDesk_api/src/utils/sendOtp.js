@@ -103,7 +103,7 @@ async function sendOtp(to, name, otp) {
   const mailOptions = {
     from: senderEmail,
     to: to,
-    subject: \`\${otp} is your IT Desk verification code\`,
+    subject: `${otp} is your IT Desk verification code`,
     html: html,
   };
 
