@@ -1,13 +1,6 @@
-// src/utils/sendOtp.js — Sends OTP verification emails via Brevo HTTP API
-//
-// HOW IT WORKS:
-// We use the Brevo HTTP API instead of SMTP. This bypasses Render's firewall
-// because it runs over standard HTTPS (port 443).
-//
-// SETUP:
-// Add these to your Render Environment Variables:
-//   BREVO_API_KEY=xkeysib-...
-//   EMAIL_FROM=your-verified-brevo-sender@gmail.com
+// src/utils/sendOtp.js — Sends OTP verification emails via Gmail OAuth2
+
+const nodemailer = require("nodemailer");
 
 /**
  * Sends a 6-digit OTP to the given email address.
@@ -17,12 +10,23 @@
  */
 async function sendOtp(to, name, otp) {
   // Use the verified sender email from the environment variable
-  const senderEmail = process.env.EMAIL_FROM;
+  const senderEmail = process.env.EMAIL_FROM || "IT Desk <itdeskotp@gmail.com>";
 
-  if (!process.env.BREVO_API_KEY) {
-    console.error("Missing BREVO_API_KEY environment variable");
+  if (!process.env.GMAIL_CLIENT_ID || !process.env.GMAIL_CLIENT_SECRET || !process.env.GMAIL_REFRESH_TOKEN) {
+    console.error("Missing Gmail OAuth2 environment variables.");
     return;
   }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: "itdeskotp@gmail.com",
+      clientId: process.env.GMAIL_CLIENT_ID,
+      clientSecret: process.env.GMAIL_CLIENT_SECRET,
+      refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+    },
+  });
 
   // Split OTP into individual digits for the styled box layout
   const digits = otp.split("").map(
@@ -96,38 +100,20 @@ async function sendOtp(to, name, otp) {
 </body>
 </html>`;
 
-  const payload = {
-    sender: {
-      name: "IT Desk",
-      email: senderEmail,
-    },
-    to: [
-      {
-        email: to,
-        name: name,
-      }
-    ],
-    subject: `${otp} is your IT Desk verification code`,
-    htmlContent: html,
+  const mailOptions = {
+    from: senderEmail,
+    to: to,
+    subject: \`\${otp} is your IT Desk verification code\`,
+    html: html,
   };
 
-  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "api-key": process.env.BREVO_API_KEY,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(`Brevo API error: ${response.status} - ${JSON.stringify(errorData)}`);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return info;
+  } catch (error) {
+    console.error("Nodemailer error:", error);
+    throw error;
   }
-
-  const data = await response.json();
-  return data;
 }
 
 module.exports = { sendOtp };

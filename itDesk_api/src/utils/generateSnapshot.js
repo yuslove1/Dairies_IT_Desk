@@ -27,7 +27,7 @@ const prisma = new PrismaClient();
 async function generateSnapshot(userId) {
   // Fetch everything we need for the report in parallel
   // Promise.all() runs all three DB queries at the same time — faster than one by one
-  const [tasks, logs, handoverNotes, user] = await Promise.all([
+  const [tasks, logs, user] = await Promise.all([
     prisma.task.findMany({
       where: { NOT: { status: "done" } }, // only open tasks in the report
       orderBy: { createdAt: "desc" },
@@ -38,9 +38,6 @@ async function generateSnapshot(userId) {
         logDate: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
       },
       orderBy: { logDate: "asc" },
-    }),
-    prisma.handoverNote.findMany({
-      where: { isActive: true },
     }),
     prisma.user.findUnique({ where: { id: userId } }),
   ]);
@@ -56,7 +53,6 @@ async function generateSnapshot(userId) {
     },
     openTasks: tasks.map((t) => ({ id: t.id, title: t.title, status: t.status, priority: t.priority })),
     logs: logs.map((l) => ({ id: l.id, content: l.content, category: l.category, logDate: l.logDate })),
-    handoverNotes: handoverNotes.map((h) => ({ id: h.id, title: h.title, content: h.content })),
   };
 
   // Generate a short unique token for the public URL
