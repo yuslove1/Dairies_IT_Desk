@@ -91,6 +91,7 @@ model User {
   name             String
   role             Role      @default(staff)
   isVerified       Boolean   @default(false)   // must verify email before logging in
+  mustChangePassword Boolean @default(false)   // force password change on next login
   verificationOtp  String?                     // 6-digit code — null after verification
   otpExpiresAt     DateTime?                   // 10 min window
   createdAt        DateTime  @default(now())
