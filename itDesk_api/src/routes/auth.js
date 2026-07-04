@@ -3,16 +3,16 @@
 //
 // ENDPOINTS:
 //   POST /api/auth/register    — create account + send 6-digit OTP email
-//   POST /api/auth/verify-otp  — verify OTP, mark user as verified, return JWT
+//   POST /api/auth/verify-otp  — verify OTP, mark user as verified, start session
 //   POST /api/auth/resend-otp  — resend OTP (new code, new 10-min window)
-//   POST /api/auth/login       — returns JWT (only for verified accounts)
+//   POST /api/auth/login       — starts a session (only for verified accounts)
+//   POST /api/auth/logout      — destroys the session server-side
 //   GET  /api/auth/me          — returns the logged-in user's profile
 // ─────────────────────────────────────────────────────────────────────────────
 
 const express = require("express");
 const bcrypt  = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
-const { generateToken } = require("../utils/generateToken");
 const { protect }       = require("../middleware/auth");
 const { sendOtp }       = require("../utils/sendOtp");
 
@@ -23,6 +23,28 @@ const prisma = new PrismaClient();
 function generateOtp() {
   // Math.random() is fine for short-lived OTPs — no need for crypto here
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// ── Helper: start a logged-in session for a user ─────────────────────────────
+// WHY regenerate() FIRST?
+// If we just wrote to the existing req.session, an attacker who obtained a
+// session ID *before* login (e.g. by visiting the site first) could ride that
+// same ID into a logged-in session — this is called "session fixation".
+// regenerate() throws away the old session ID and issues a brand new one the
+// moment someone authenticates, so pre-login and post-login sessions are never
+// the same ID.
+function establishSession(req, user) {
+  return new Promise((resolve, reject) => {
+    req.session.regenerate((err) => {
+      if (err) return reject(err);
+      req.session.userId = user.id;
+      req.session.role   = user.role;
+      req.session.save((err2) => {
+        if (err2) return reject(err2);
+        resolve();
+      });
+    });
+  });
 }
 
 // ── POST /api/auth/register ───────────────────────────────────────────────────
@@ -94,7 +116,7 @@ router.post("/register", async (req, res) => {
 
 // ── POST /api/auth/verify-otp ─────────────────────────────────────────────────
 // Takes { email, otp } and verifies the account.
-// Returns a JWT so the user is logged in immediately after verification.
+// Starts a session so the user is logged in immediately after verification.
 router.post("/verify-otp", async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -114,11 +136,11 @@ router.post("/verify-otp", async (req, res) => {
       data:  { isVerified: true, verificationOtp: null, otpExpiresAt: null },
     });
 
-    // Issue JWT — user is now logged in
-    const token = generateToken(verified);
+    // Start the session — the Set-Cookie header goes out with this response
+    await establishSession(req, verified);
+
     res.json({
       message: "Email verified successfully. Welcome!",
-      token,
       user: { id: verified.id, email: verified.email, name: verified.name, role: verified.role },
     });
   } catch (err) {
@@ -180,15 +202,32 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const token = generateToken(user);
+    await establishSession(req, user);
+
     res.json({
-      token,
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Server error during login" });
   }
+});
+
+// ── POST /api/auth/logout ─────────────────────────────────────────────────────
+// Destroys the session row in the DB — unlike a JWT, this takes effect
+// immediately for this device. There's nothing left for anyone to replay.
+// SESSION_COOKIE_NAME must match the `name` passed to express-session in index.js.
+const SESSION_COOKIE_NAME = "it_desk_sid";
+
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout error:", err);
+      return res.status(500).json({ error: "Failed to log out" });
+    }
+    res.clearCookie(SESSION_COOKIE_NAME);
+    res.json({ message: "Logged out" });
+  });
 });
 
 // ── GET /api/auth/me ──────────────────────────────────────────────────────────

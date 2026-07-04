@@ -1,59 +1,44 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// src/middleware/auth.js — JWT verification middleware
+// src/middleware/auth.js — Session verification middleware
 //
 // WHAT IS MIDDLEWARE?
 // A middleware function sits between the incoming HTTP request and your route
 // handler. It can read the request, modify it, and either pass it along (next())
 // or reject it by sending a response (res.status(401).json(...)).
 //
-// HOW JWT AUTH WORKS (the short version):
-// 1. User logs in  →  server creates a signed token containing { userId, role }
-// 2. Frontend stores that token in localStorage
-// 3. On every protected request, the frontend sends:
-//      Authorization: Bearer eyJhbGci...
-// 4. THIS middleware reads that header, verifies the token wasn't tampered with,
-//    and attaches the decoded payload to req.user so your routes can use it.
+// HOW SESSION AUTH WORKS (the short version):
+// 1. User logs in  →  server creates a session record in the DB and sends the
+//    browser a cookie containing only a random session ID (sid) — no user data.
+// 2. The browser sends that cookie automatically on every request to this API
+//    (that's what `credentials: true` / `withCredentials` is for on the frontend).
+// 3. express-session (wired up in index.js) reads the cookie, looks up the
+//    matching session row via the Prisma store, and populates req.session.
+// 4. THIS middleware just checks whether req.session has a logged-in user on it,
+//    and if so, attaches a plain { userId, role } to req.user so the rest of the
+//    app doesn't need to know or care that sessions replaced JWT.
 //
-// WHY "Bearer"?
-// It's just a convention from the OAuth spec. "Bearer" means "whoever holds
-// this token is allowed in". The actual token is everything after the space.
+// WHY THIS IS DIFFERENT FROM JWT:
+// A JWT is self-contained — the server can verify it without a database lookup,
+// but it also can't be revoked before it expires. A session is a DB lookup on
+// every request, but logging out (destroying the session row) immediately and
+// permanently ends that session — there's no "wait for the token to expire".
 // ─────────────────────────────────────────────────────────────────────────────
 
-const jwt = require("jsonwebtoken");
-
 function protect(req, res, next) {
-  // 1. Read the Authorization header
-  const authHeader = req.headers.authorization;
-
-  // 2. Check the header exists and starts with "Bearer "
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    // 401 = "Unauthorized" — the request has no (or invalid) credentials
-    return res.status(401).json({ error: "No token provided. Please log in." });
+  // req.session is created by express-session for every request (even logged-out
+  // ones — it's just empty). We only care whether it carries a userId.
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ error: "No active session. Please log in." });
   }
 
-  // 3. Extract just the token string (everything after "Bearer ")
-  const token = authHeader.split(" ")[1];
+  // Attach a plain object shaped just like the old JWT payload so every route
+  // handler downstream (tasks.js, logs.js, etc.) works unchanged.
+  req.user = {
+    userId: req.session.userId,
+    role:   req.session.role,
+  };
 
-  try {
-    // 4. Verify the token using our secret key
-    // jwt.verify() will throw an error if:
-    //   - the token was tampered with (signature mismatch)
-    //   - the token has expired
-    //   - the token is completely invalid
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // 5. Attach the decoded payload to the request object
-    // Now any route handler after this middleware can access:
-    //   req.user.userId  — the logged-in user's ID
-    //   req.user.role    — "staff" | "manager" | "admin"
-    req.user = decoded;
-
-    // 6. Pass control to the next function (the actual route handler)
-    next();
-  } catch (err) {
-    // Token was invalid or expired
-    return res.status(401).json({ error: "Invalid or expired token. Please log in again." });
-  }
+  next();
 }
 
 module.exports = { protect };
