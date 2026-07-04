@@ -81,11 +81,21 @@ router.post("/", requireRole("staff", "manager", "admin"), async (req, res) => {
         priority:    priority   || "med",
         status:      status     || "todo",
         assignedTo:  assignedTo || null,
-        // req.user.userId comes from the JWT — the server sets who created it,
+        // req.user.userId comes from the session — the server sets who created it,
         // the client can't fake this.
         createdBy: req.user.userId,
       },
+      // Include the author so this matches the shape GET /api/tasks returns —
+      // both the HTTP response AND the socket event need the real name, not
+      // just an ID, otherwise other connected clients see a blank assignee.
+      include: {
+        author: { select: { id: true, name: true, role: true } },
+      },
     });
+
+    // Tell every other connected client a task was created, in real time —
+    // this is what powers the live task board (see lib/socket.js on the frontend).
+    req.app.get("io").emit("task:created", task);
 
     // 201 = Created (more specific than 200 OK — something new was made)
     res.status(201).json({ task });
@@ -124,7 +134,14 @@ router.patch("/:id", requireRole("staff", "manager", "admin"), async (req, res) 
       if (category    !== undefined) data.category    = category;
     }
 
-    const task = await prisma.task.update({ where: { id }, data });
+    const task = await prisma.task.update({
+      where: { id },
+      data,
+      include: {
+        author: { select: { id: true, name: true, role: true } },
+      },
+    });
+    req.app.get("io").emit("task:updated", task);
     res.json({ task });
   } catch (err) {
     console.error("Update task error:", err);
@@ -143,6 +160,7 @@ router.delete("/:id", requireRole("manager", "admin"), async (req, res) => {
     }
 
     await prisma.task.delete({ where: { id } });
+    req.app.get("io").emit("task:deleted", { id });
 
     // 204 = No Content — success, but nothing to return
     res.status(204).send();

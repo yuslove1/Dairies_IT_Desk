@@ -79,8 +79,14 @@ router.post("/", requireRole("staff", "manager", "admin"), async (req, res) => {
         logDate:  new Date(), // timestamp is set server-side — client can't fake the time
         createdBy: req.user.userId,
       },
+      // Match the shape GET /api/logs returns, so the socket event carries a
+      // real author name, not just an ID.
+      include: {
+        author: { select: { id: true, name: true } },
+      },
     });
 
+    req.app.get("io").emit("log:created", log);
     res.status(201).json({ log });
   } catch (err) {
     console.error("Create log error:", err);
@@ -102,7 +108,14 @@ router.patch("/:id", requireRole("manager", "admin"), async (req, res) => {
     if (content  !== undefined) data.content  = content;
     if (category !== undefined) data.category = category;
 
-    const log = await prisma.log.update({ where: { id }, data });
+    const log = await prisma.log.update({
+      where: { id },
+      data,
+      include: {
+        author: { select: { id: true, name: true } },
+      },
+    });
+    req.app.get("io").emit("log:updated", log);
     res.json({ log });
   } catch (err) {
     console.error("Update log error:", err);
@@ -121,6 +134,7 @@ router.delete("/:id", requireRole("manager", "admin"), async (req, res) => {
     }
 
     await prisma.log.delete({ where: { id } });
+    req.app.get("io").emit("log:deleted", { id });
     res.status(204).send();
   } catch (err) {
     console.error("Delete log error:", err);
