@@ -179,3 +179,16 @@ model Asset {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// WHY A DB-BACKED SESSION TABLE?
+// Session auth means the SERVER holds the source of truth for "who's logged in",
+// not a self-contained token like JWT. The cookie sent to the browser only holds
+// a random session ID (sid) — this table is where that ID is looked up to find
+// out which user it belongs to and whether it's expired.
+// Field names/shapes here match what @quixo3/prisma-session-store expects.
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
