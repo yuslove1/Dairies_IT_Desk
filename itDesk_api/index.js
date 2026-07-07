@@ -52,17 +52,21 @@ app.set("trust proxy", 1);
 
 // cors() — Cross-Origin Resource Sharing
 // Browsers block requests from one domain to another by default.
-// We allow the configured CLIENT_URL plus common dev ports (3000 & 3001)
-// because Next.js picks the next free port automatically.
+// CLIENT_URL can hold more than one origin, comma-separated — useful when an
+// old frontend deployment is still live alongside a new one, or a Vercel
+// preview URL alongside the production domain. Every one of them is trusted
+// equally; there's no "primary" origin as far as CORS is concerned.
+// We also always allow common local dev ports (3000 & 3001) because Next.js
+// picks the next free port automatically.
 //
 // credentials: true is required for session cookies to travel cross-origin —
 // without it the browser won't send (or accept) the Set-Cookie header at all.
 // Note this only works alongside a specific origin list, never "*".
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  ...(process.env.CLIENT_URL || "").split(",").map((url) => url.trim()).filter(Boolean),
   "http://localhost:3000",
   "http://localhost:3001",
-].filter(Boolean);
+];
 
 app.use(cors({
   origin: (origin, callback) => {
